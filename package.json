@@ -1,0 +1,55 @@
+{
+  "name": "epoxy",
+  "version": "0.1.0",
+  "description": "Sync a headless CMS with a cloud storage bucket.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OakLabsInc/epoxy.git"
+  },
+  "keywords": [
+    "cloud",
+    "cms",
+    "cloud-functions",
+    "pipeline",
+    "automation",
+    "sync",
+    "synchronization",
+    "offline",
+    "storage",
+    "json",
+    "static",
+    "headless"
+  ],
+  "author": {
+    "name": "Brandon Mason",
+    "email": "brandon.mason@lumenday.com"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OakLabsInc/epoxy/issues"
+  },
+  "homepage": "https://github.com/OakLabsInc/epoxy#readme",
+  "dependencies": {
+    "@google-cloud/storage": "^2.4.2",
+    "async": "^2.6.2",
+    "contentful-management": "^5.7.0",
+    "joi": "^14.3.1",
+    "law": "^1.1.1",
+    "lodash": "^4.17.11",
+    "md5": "^2.2.1",
+    "request": "^2.88.0",
+    "serverless-google-cloudfunctions": "^2.3.2"
+  },
+  "devDependencies": {
+    "eslint": "^5.14.1",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0"
+  }
+}
