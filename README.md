@@ -8,7 +8,7 @@ Currently the only supported use case is to sync a Contentful environment with a
 
 In typical usage, you would create an index.js file that will require `epoxy` and pass it the configuration it requires.
 
-```
+```javascript
 const {join} = require('path')
 
 // load environment variables
@@ -52,7 +52,7 @@ To obtain a gcloud-auth.json, follow the directions for [setting up a google ser
 
 Your resource config will depend on the contentful resources that you want to sync up.  It will look something like this:
 
-```
+```javascript
 {
   "resources": {
     "category": {
@@ -121,7 +121,7 @@ These are the standard services that are supplied.  Think of them as the possibl
 
 Simple params:
 
-```
+```javascript
 "params": {
   "path": "category",
   "fileNameKey": [ "id" ]
@@ -132,7 +132,7 @@ This will pull `id` out of the data coming in from contentful and use that as th
 
 `fileNameKey` supports some more complex use cases as well:
 
-```
+```javascript
 "params": {
   "path": "topics",
   "fileNameKey": [
@@ -150,7 +150,7 @@ This will take the `id` from the data, run an md5 function on the content, and j
 
 In addition you can define your own services and pass them to epoxy at the time of initialization.
 
-```
+```javascript
 const services = epoxy({
   ...other config,
   custom_services: require('./custom')
