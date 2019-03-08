@@ -4,7 +4,22 @@ Epoxy is a tool to glue cloud services together.  Conceptually it's similar to Z
 
 Currently the only supported use case is to sync a Contentful environment with a Google Cloud Storage bucket.  Other use cases may be implemented as the need arises.
 
-# Usage
+# CLI Usage
+
+```text
+usage: epoxy <command>
+
+Commands:
+  epoxy deploy        deploy to local or cloud
+  epoxy log           get logs from local instance
+  epoxy transfer-all  initiate a transfer of all resources
+
+Options:
+  --version   Show version number                                   [boolean]
+  -h, --help  Show help                                             [boolean]
+```
+
+# Setup
 
 In typical usage, you would create an index.js file that will require `epoxy` and pass it the configuration it requires.
 
