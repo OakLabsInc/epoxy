@@ -1,9 +1,14 @@
+  /* eslint-disable no-unused-expressions */
 const async = require('async')
 const {exec} = require('child_process')
 
-module.exports = yargs => {
-  const fns = Object.keys(require(process.cwd()))
-  console.log('deploying:', fns)
+module.exports = services => yargs => {
+  yargs
+    .usage('usage: $0 <environment>')
+    .argv
+
+  const serviceNames = Object.keys(services)
+  console.log('deploying:', serviceNames)
 
   const deploy = (fn_name, next) => {
     exec(`npx functions deploy ${fn_name} --trigger-http`,
@@ -14,7 +19,7 @@ module.exports = yargs => {
       })
   }
 
-  async.map(fns, deploy, (err, result) => {
+  async.map(serviceNames, deploy, (err, result) => {
     console.log({err, result})
   })
 }

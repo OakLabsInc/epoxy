@@ -175,3 +175,7 @@ const services = epoxy({
 `custom_services` should be an object where the keys are service names, and the values are in the format of a standard [law service](https://github.com/torchlightsoftware/law).
 
 Custom services let you perform any action you want - save to a database, send a request to a cloud service, etc.  Any javascript code you want to write can be run and passed the params of the event.  If you build some general purpose services that you think others might find handy, let us know!  We'd love to expand our library of features.
+
+# Former Use of Epoxy
+
+Before March 11, 2019 and version 1.0.0, epoxy was a templating library.  If this is your use case, please fix your version number to `0.4.1`.  Be aware that this use case has been deprecated and will no longer be supported.

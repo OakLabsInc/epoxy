@@ -36,12 +36,16 @@ module.exports = (config = {}) => {
   // injects handlers with config and services
   const handlers = getHandlers({config, services})
 
-  // add law_services in case we want to call them directly...
   // enumerable: false so deploy script does not pick them up
-  Object.defineProperty(handlers, 'law_services', {
-    value: services,
-    enumerable: false
-  })
+  const hidden = (key, value) =>
+    Object.defineProperty(handlers, key,
+      {value, enumerable: false})
+
+  // add services, configuration, meta data
+  // mostly to help CLI consume the resulting exports
+  hidden('isEpoxyService', true)
+  hidden('lawServices', services)
+  hidden('config', config)
 
   // There are two main handlers: epoxyEvent and contentfulEvent
   //  - contentfulEvent handles HTTP callback data directly from contentful

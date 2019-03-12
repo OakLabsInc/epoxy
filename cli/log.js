@@ -1,6 +1,6 @@
 const {spawn} = require('child_process')
 
-module.exports = yargs => {
+module.exports = config => yargs => {
   const argv = yargs
     .usage('usage: $0 log [options]')
     .alias('l', 'limit')
@@ -9,6 +9,5 @@ module.exports = yargs => {
     .argv
 
   console.log(`npx functions logs read --limit=${argv.l}`)
-  //exec(`functions logs read --limit=${argv.l}`)
   spawn('npx', ['functions', 'logs', 'read', `--limit=${argv.l}`], {stdio: 'inherit'})
 }
