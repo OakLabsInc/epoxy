@@ -16,8 +16,12 @@ var Contentful = function (config) {
     return space
   }
 
-  this.getResource = function ({sys}) {
-    return sys.contentType.sys.id
+  this.getType = function (data) {
+    return _.get(data, 'sys.type')
+  }
+
+  this.getResource = function (data) {
+    return _.get(data, 'sys.contentType.sys.id')
   }
 
   this.getId = function ({sys: {id}}) {

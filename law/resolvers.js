@@ -1,9 +1,12 @@
+// we're mostly just using these resolvers as a way to inject the config
+// into the utility functions that need it
 module.exports = config => {
-  // we're mostly just using these resolvers as a way to inject the config
-  // into the utility functions that need it
+  const Contentful = require('../util/contentful')
+  const contentful = new Contentful(config)
+
   const util = {
     gcs: require('../util/gcs')(config),
-    contentful: require('../util/contentful')(config),
+    contentful,
     config: config,
     getWritePath: require('../util/getWritePath')
   }

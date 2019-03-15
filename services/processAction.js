@@ -20,13 +20,14 @@ module.exports = {
     ],
     util: ['getWritePath', 'config'],
   },
-  required: ['_id', 'resource', 'action', 'data'],
+  optional: ['_id'],
+  required: ['resource', 'action', 'data'],
   service: ({_id, resource, action, data}, done, {services, util}) => {
     const {config: {resource_config, service_url}} = util
     console.log(`processing ${resource} -> ${action}`)
 
     // we store the ID for easy generic reference
-    _.assign(data, {_id})
+    if (_id) _.assign(data, {_id})
 
     let resourceConfig = resource_config.resources[resource]
     let actionList = resourceConfig.actions[action]

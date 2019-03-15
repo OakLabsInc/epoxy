@@ -1,3 +1,4 @@
+
 module.exports = {
   dependencies: {
     util: ['gcs']
@@ -5,17 +6,20 @@ module.exports = {
   required: ['writePath', 'contentType', 'item'],
   service: ({writePath, contentType, item}, done, {util: {gcs}}) => {
     let ws = gcs.getBucketWS(writePath, contentType)
-    ws.on('error', (err) => {
-      err.message = `Could not open gs://${ws._bucket}/${ws._path}: ${err.message}`
+    const handleErr = (err) => {
+      if (err) err.message = `Could not open gs://${ws._bucket}/${ws._path}: ${err.message}`
       done(err)
-    })
-    ws.on('finish', () => {
-      done(null, {
-        path: writePath,
-        item
+    }
+    ws.on('error', handleErr)
+    // trying to do everything we can to handle these errors
+    // for some reason we still get UnhandledPromiseRejectionWarning
+    try {
+      ws.write(item, null, err => {
+        handleErr(err)
       })
-    })
-    ws.write(item)
-    ws.end()
+      ws.end()
+    } catch (e) {
+      handleErr(e)
+    }
   }
 }

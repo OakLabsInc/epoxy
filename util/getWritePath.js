@@ -7,9 +7,9 @@ const {URL} = require('url')
 // The file name format is described by 'fileNameKey' in the resource config.
 // The fileNameKey joins properties from the data to create the file name.
 function getWritePath (data, {fileNameKey, path}) {
-  //console.log('getConfigWritePath received:', {data, resourceConfig})
-  const write_path = _
-    .chain(fileNameKey)
+  //const {inspect} = require('util')
+  //console.log('getConfigWritePath received:', inspect({data, fileNameKey, path}, {depth: 5}))
+  const write_path = _(fileNameKey)
     .map(configKey => parseConfigPathObject(configKey, data))
     .thru(v => join(path, ...v))
     .value()
@@ -30,24 +30,24 @@ function parseConfigPathObject (configKey, data) {
   if (_.isObject(configKey)) {
     // md5
     if (_.has(configKey, 'md5')) {
-      return _
-        .chain(configKey['md5'])
-        .map(v => data[_.trim(v)])
+      const vals = _(configKey['md5'])
+        .map(v => _.get(data, _.trim(v)))
         .join(',')
-        .thru(v => md5(v))
-        .value()
+      return md5(vals)
     }
-    // thru
-    if (_.has(configKey, 'file')) {
-      return _
-        .chain(configKey['file'])
-        .thru(v => (new URL(data[v])).pathname)
+    // get fileName from url
+    if (_.has(configKey, 'fromUrl')) {
+      return _(configKey['fromUrl'])
+        .thru(v => (new URL(_.get(data, v))).pathname)
         .split('/')
         .last()
-        .value()
+    }
+    // return fileName unmodified
+    if (_.has(configKey, 'fileName')) {
+      return _.get(data, configKey['fileName'])
     }
   } else {
-    return _.snakeCase(data[configKey])
+    return _.snakeCase(_.get(data, configKey))
   }
 }
 

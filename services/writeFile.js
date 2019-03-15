@@ -1,6 +1,6 @@
 const _ = require('lodash')
 const request = require('request')
-const {URL, format} = require('url')
+const formatUrl = require('../util/url')
 
 module.exports = {
   dependencies: {
@@ -11,7 +11,7 @@ module.exports = {
     console.log('writing file:', writePath)
 
     // pull the image URL from the config fetchUrlKey and then pipe to the write stream
-    let toFetch = new URL(
+    let toFetch = formatUrl(
       _.get(data, fetchUrlKey)
     )
     // incase its no protocol, append a simple HTTP
@@ -29,7 +29,7 @@ module.exports = {
       .on('finish', () => {
         done(err, {path: writePath})
       })
-    request.get(format(toFetch))
+    request.get(toFetch)
       .once('response', res => res.headers)
       .pipe(ws)
   }
