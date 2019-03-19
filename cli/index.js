@@ -22,3 +22,7 @@ const main = async () => {
 }
 
 main()
+  .catch(e => {
+    console.log(e.stack)
+    process.exit(1)
+  })

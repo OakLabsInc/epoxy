@@ -56,7 +56,7 @@ module.exports = ({config, lawServices}) => {
       await bucketRequests
 
       // save the resume token
-      //return saveResumeToken(response.nextSyncToken)
+      return saveResumeToken(response.nextSyncToken)
     }
   }
 }
