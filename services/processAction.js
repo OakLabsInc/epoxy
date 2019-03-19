@@ -1,12 +1,6 @@
 const async = require('async')
 const _ = require('lodash')
 
-// This flag determines whether we should treat '$resource' as an
-// internal service call, or initiate a network request.  Service
-// call has less overhead, but network request can be
-// scaled/redirected/logged.  Default is true (internal service call).
-const RECURSE_INTERNAL = process.env.RECURSE_INTERNAL || true
-
 module.exports = {
   dependencies: {
     services: [
@@ -23,7 +17,7 @@ module.exports = {
   optional: ['_id'],
   required: ['resource', 'action', 'data'],
   service: ({_id, resource, action, data}, done, {services, util}) => {
-    const {config: {resource_config, service_url}} = util
+    const {config: {resource_config, service_url, recurse_internal}} = util
     console.log(`processing ${resource} -> ${action}`)
 
     // we store the ID for easy generic reference
@@ -63,7 +57,7 @@ module.exports = {
         }
 
         // call internal service or network request
-        if (RECURSE_INTERNAL) {
+        if (recurse_internal) {
           services.processAction(params, next)
         } else {
           services.triggerAction(params, next)

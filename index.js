@@ -4,22 +4,39 @@ const getHandlers = require('./handlers')
 
 // param schema
 const validateConfig = Joi.object().required().keys({
+
+  // contentful access configurations
   contentful: {
     space_id: Joi.string().required(),
     environment: Joi.string().required(),
     token: Joi.string().required(),
   },
+
+  // google cloud access configurations
   gcloud: {
     project: Joi.string().required(),
     bucket: Joi.string().required(),
     path_prefix: Joi.string(),
     auth_file: Joi.string().required(),
   },
+
+  // used for self-referencing services if recurse_internal is false
   service_url: Joi.string().required(),
+
+  // describes what should happen when we receive change events for
+  // different contentful resources
   resource_config: Joi.object().required().keys({
     resources: Joi.object().required(),
   }),
+
+  // custom services provided by epoxy user
   custom_services: Joi.object(),
+
+  // This flag determines whether we should treat '$resource' as an
+  // internal service call, or initiate a network request.  Service
+  // call has less overhead, but network request can be
+  // scaled/redirected/logged.  Default is true (internal service call).
+  recurse_internal: Joi.boolean(),
 })
 
 // validate the config and return the services
