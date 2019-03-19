@@ -27,7 +27,7 @@ In typical usage, you would create an index.js file that will require `epoxy` an
 const {join} = require('path')
 
 // load environment variables
-require('dotenv').config()
+require('env-yml').config({path: join(__dirname, 'env.dev.yml')})
 const {
   SERVICE_URL,
   CONTENTFUL_SPACE_ID,
