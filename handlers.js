@@ -111,21 +111,5 @@ module.exports = ({config, services}) => {
       })
     },
 
-    echo(req, res) {
-      let {params, body, headers, query} = req
-      rawBodyJSON(req, (err, rawBody) => {
-        if (err) {
-          res
-            .status(500)
-            .send(err)
-        } else {
-          res
-            .status(200)
-            .json(
-              {params, body, headers, query, rawBody}
-            )
-        }
-      })
-    }
   }
 }
