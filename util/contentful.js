@@ -126,6 +126,14 @@ var Contentful = function (config) {
     const env = await _this.getEnvironment()
     return env.createAsset(args)
   }
+  this.createEntry = async function (args) {
+    const env = await _this.getEnvironment()
+    return env.createEntry(args)
+  }
+  this.createUpload = async function (args) {
+    const env = await _this.getEnvironment()
+    return env.createUpload(args)
+  }
 }
 
 module.exports = Contentful
