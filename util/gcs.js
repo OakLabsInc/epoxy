@@ -1,5 +1,6 @@
 const {join} = require('path')
 const {Storage} = require('@google-cloud/storage')
+const moment = require('moment')
 
 module.exports = (config) => {
   const storage = new Storage({
@@ -29,6 +30,40 @@ module.exports = (config) => {
       stream._bucket = bucket
       stream._path = path
       return stream
+    },
+    getReadStream(path) {
+      const {bucket, path_prefix} = config.gcloud
+
+      // add path_prefix if we have one
+      if (path_prefix) {
+        path = join(path_prefix, path)
+      }
+      //console.log('getting read stream for:', {bucket, path})
+
+      let file = storage.bucket(bucket).file(path)
+      const stream = file.createReadStream({})
+      stream._bucket = bucket
+      stream._path = path
+      console.log('returning stream')
+      return stream
+    },
+    async getSignedUrl(path) {
+      const {bucket, path_prefix} = config.gcloud
+      // google JS client docs here:
+      // https://cloud.google.com/nodejs/docs/reference/storage/2.3.x/File#getSignedUrl
+
+      // add path_prefix if we have one
+      if (path_prefix) {
+        path = join(path_prefix, path)
+      }
+      //console.log('getting signed url for:', {bucket, path})
+
+      const file = storage.bucket(bucket).file(path)
+      const urlResponse = await file.getSignedUrl({
+        action: 'read',
+        expires: moment().add(1, 'hour')
+      })
+      return urlResponse && urlResponse[0]
     }
   }
 }

@@ -10,6 +10,7 @@ const loadCmd = (s) =>
     .command('deploy', 'deploy to local or cloud', require('./deploy')(s))
     .command('log', 'get logs from local instance', require('./log')(s))
     .command(require('./transfer-all')(s))
+    .command('run', 'run a service from the CLI - named args are treated as service params', require('./run')(s))
     .help('h')
     .alias('h', 'help')
     .demandCommand()

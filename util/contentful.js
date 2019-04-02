@@ -1,19 +1,36 @@
 const _ = require('lodash')
 const {createClient} = require('contentful-management')
+//const Q = require('p-queue')
 
 var Contentful = function (config) {
-  let _this = this
+  const _this = this
+  _this.space = null
+  _this.env = null
+
+  // TODO: find a way to wire this into the Contentful client seemlessly
+  // TODO: make settings configurable
+  //_this.queue = new Q({interval: 1000, intervalCap: 3})
 
   // create one shared client between all Contentful instances
   this.client = createClient({
     accessToken: config.contentful.token
   })
 
-  this.getSpace = function () {
-    let space = _this.client.getSpace(
+  // space and env are cached so we don't have to keep querying them
+  this.getSpace = async function () {
+    if (_this.space) return _this.space
+    _this.space = await _this.client.getSpace(
       config.contentful.space_id
     )
-    return space
+    return _this.space
+  }
+  this.getEnvironment = async function () {
+    const space = await _this.getSpace()
+    if (_this.env) return _this.env
+    _this.env = await space.getEnvironment(
+      config.contentful.environment || 'master'
+    )
+    return _this.env
   }
 
   this.getType = function (data) {
@@ -24,26 +41,37 @@ var Contentful = function (config) {
     return _.get(data, 'sys.contentType.sys.id')
   }
 
-  this.getId = function ({sys: {id}}) {
-    return id
+  this.getId = function (data) {
+    return _.get(data, 'sys.id')
+  }
+  this.get = function (data, field) {
+    return _.get(data, ['fields', field, 'en-US'])
+  }
+  this.set = function (data, field) {
+    return _.set(data, ['fields', field, 'en-US'])
+  }
+  this.setLink = function (data, field, id) {
+    return _this.set(data, field,
+      {sys: {type: 'Link', linkType: 'Entry', id}}
+    )
+  }
+  this.alreadyHasLink = function(entry, field) {
+    return _.get(_this.get(entry, field), 'sys.type') === 'Link'
   }
 
   this.getEntry = async function (id) {
-    return _this.client
-      .getSpace(
-        config.contentful.space_id
-      )
-      .then(space => space.getEntry(id))
+    const env = await _this.getEnvironment()
+    return env.getEntry(id)
   }
 
-  // TODO: handle deprecation warning
-  // https://contentful.github.io/contentful-management.js/contentful-management/latest/ContentfulEnvironmentAPI.html#.getAsset
+  this.getEntries = async function (params) {
+    const env = await _this.getEnvironment()
+    return env.getEntries(params)
+  }
+
   this.getAsset = async function (id) {
-    return _this.client
-      .getSpace(
-        config.contentful.space_id
-      )
-      .then(space => space.getAsset(id))
+    const env = await _this.getEnvironment()
+    return env.getAsset(id)
   }
 
   // TODO: refactor to async function
@@ -92,6 +120,11 @@ var Contentful = function (config) {
       .chain(fields)
       .mapValues(v => v[i18n])
       .value()
+  }
+
+  this.createAsset = async function (args) {
+    const env = await _this.getEnvironment()
+    return env.createAsset(args)
   }
 }
 
