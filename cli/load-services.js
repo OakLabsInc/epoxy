@@ -3,7 +3,6 @@ const exec = promisify(require('child_process').exec)
 
 const binaries = [
   {bin: 'functions', dep: '@google-cloud/functions-emulator'},
-  {bin: 'serverless', dep: 'serverless'},
 ]
 
 module.exports = async () => {
