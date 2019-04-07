@@ -3,15 +3,8 @@ const _ = require('lodash')
 
 module.exports = {
   dependencies: {
-    services: [
-      // these are called dynamically, based on the resource_config
-      'writeEntry',
-      'deleteEntry',
-      'writeLocation',
-      'writeFile',
-      'triggerAction',
-      'processAction',
-    ],
+    // these are called dynamically, based on the resource_config
+    services: '*',
     util: ['getWritePath', 'config'],
   },
   optional: ['_id'],

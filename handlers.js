@@ -1,6 +1,7 @@
 const _ = require('lodash')
 const async = require('async')
 
+const debug = require('./util/debug')
 const Contentful = require('./util/contentful')
 
 // custom function to extract json
@@ -10,7 +11,6 @@ function rawBodyJSON (req, cb) {
     if (_.isBuffer(req.body)) {
       try {
         req.body = JSON.parse(req.body.toString('utf8').trim())
-        console.log('BUFFER PARSED', req.body)
       } catch (e) {
         err = e
       }
@@ -97,15 +97,21 @@ module.exports = ({config, services}) => {
         })
 
         function process (cleanData) {
-          services.processAction({
+          const args = {
             config,
             _id: id,
             resource,
             action,
             data: cleanData,
-          }, (err, result) => {
-            if (err) return res.status(500).send(err)
-            res.status(200).json(result)
+          }
+          debug('calling processAction:', args)
+          services.processAction(args, (err, result) => {
+            if (err) {
+              console.error(err)
+              res.status(500).send(err)
+            } else {
+              res.status(200).json(result)
+            }
           })
         }
       })

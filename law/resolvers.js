@@ -7,6 +7,7 @@ module.exports = config => {
   const util = {
     gcs: require('../util/gcs')(config),
     contentful,
+    debug: require('../util/debug'),
     config: config,
     getWritePath: require('../util/getWritePath')
   }
