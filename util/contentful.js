@@ -13,7 +13,7 @@ var Contentful = function (config) {
 
   // create one shared client between all Contentful instances
   this.client = createClient({
-    accessToken: config.contentful.token
+    accessToken: config.contentful.management_token
   })
 
   // space and env are cached so we don't have to keep querying them
@@ -95,7 +95,6 @@ var Contentful = function (config) {
     }
     switch (field.sys.linkType) {
     case 'Asset': {
-      //console.log('RESOLVE SYS', field, field.sys.id)
       _this
         .getAsset(field.sys.id)
         .then(asset => _this.stripLocalization(asset.fields))

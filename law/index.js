@@ -1,6 +1,7 @@
 const _ = require('lodash')
 const {join} = require('path')
-const {load, create, printFilters} = require('law') // eslint-disable-line no-unused-vars
+const {load, create, printFilters} = require('law')
+const debug = require('../util/debug')
 
 const jargon = require('./jargon')
 const policy = require('./policy')
@@ -23,6 +24,6 @@ module.exports = (config) => {
     policy,
     resolvers,
   })
-  //console.log('I am the law:', printFilters(_services))
+  debug('I am the law:', printFilters(_services))
   return _services
 }

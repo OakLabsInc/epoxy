@@ -26,7 +26,7 @@ module.exports = {
           contentful.resolveSys(field, cb)
         },
         function (err, result) {
-          if (err) console.error(err)
+          if (err) console.error('processContenful Error:', err)
           process(result)
         }
       )

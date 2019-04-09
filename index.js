@@ -9,6 +9,7 @@ const validateConfig = Joi.object().required().keys({
   contentful: {
     space_id: Joi.string().required(),
     environment: Joi.string().required(),
+    management_token: Joi.string().required(),
     token: Joi.string().required(),
   },
 

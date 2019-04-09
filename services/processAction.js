@@ -1,5 +1,6 @@
 const async = require('async')
 const _ = require('lodash')
+const debug = require('../util/debug')
 
 module.exports = {
   dependencies: {
@@ -11,7 +12,7 @@ module.exports = {
   required: ['resource', 'action', 'data'],
   service: ({_id, resource, action, data}, done, {services, util}) => {
     const {config: {resource_config, service_url, recurse_internal}} = util
-    console.log(`processing ${resource} -> ${action}`)
+    debug(`processing ${resource} -> ${action}`)
 
     // we store the ID for easy generic reference
     if (_id) _.assign(data, {_id})

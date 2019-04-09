@@ -5,7 +5,7 @@ const fs = require('fs')
 const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
 const {join} = require('path')
-const Queue = require('promise-queue')
+const Queue = require('p-queue')
 
 // helper to read files in currend directory
 const rel = (...path) => join(process.cwd(), ...path)
@@ -37,7 +37,14 @@ module.exports = ({config, lawServices}) => {
       const args = token ? {nextSyncToken: token} : {initial: true}
 
       // sync project starting at resume token or null
-      const response = await client.sync(args)
+      let response
+      try {
+        response = await client.sync(args)
+      } catch (e) {
+        console.error('Error: ', e.message)
+        console.dir(e.response.data, {depth: 5})
+        process.exit(1)
+      }
 
       // for each asset, send an epoxy event
       const sendEntry = async (data) =>
@@ -48,12 +55,12 @@ module.exports = ({config, lawServices}) => {
       //const allRecords = response.entries.slice(3, 4)
 
       // queue them up to limit number of concurrent requests
-      const bucketRequests = new Queue(5, 5000)
+      const bucketRequests = new Queue({intervalCap: 5, interval: 5000})
       allRecords.forEach(
         asset => bucketRequests.add(() => sendEntry(asset))
       )
 
-      await bucketRequests
+      await bucketRequests.onEmpty()
 
       // save the resume token
       return saveResumeToken(response.nextSyncToken)

@@ -32,6 +32,7 @@ const {
   SERVICE_URL,
   CONTENTFUL_SPACE_ID,
   CONTENTFUL_ENVIRONMENT,
+  CONTENTFUL_MANAGEMENT_TOKEN,
   CONTENTFUL_TOKEN,
   GCLOUD_PROJECT,
   GCLOUD_BUCKET,
@@ -46,6 +47,7 @@ const services = epoxy({
   contentful: {
     space_id: CONTENTFUL_SPACE_ID,
     environment: CONTENTFUL_ENVIRONMENT,
+    management_token: CONTENTFUL_MANAGEMENT_TOKEN,
     token: CONTENTFUL_TOKEN,
   },
   gcloud: {

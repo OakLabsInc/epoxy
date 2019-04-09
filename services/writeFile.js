@@ -1,6 +1,7 @@
 const _ = require('lodash')
 const request = require('request')
 const formatUrl = require('../util/url')
+const debug = require('../util/debug')
 
 module.exports = {
   dependencies: {
@@ -8,7 +9,7 @@ module.exports = {
   },
   required: ['fetchUrlKey', 'writePath', 'data'],
   service: ({fetchUrlKey, writePath, data}, done, {util: {gcs}}) => {
-    console.log('writing file:', writePath)
+    debug('writing file:', writePath)
 
     // pull the image URL from the config fetchUrlKey and then pipe to the write stream
     let toFetch = formatUrl(

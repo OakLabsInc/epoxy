@@ -1,4 +1,5 @@
 const is404 = (err) => err && err.message && err.message === 'Not Found'
+const debug = require('../util/debug')
 
 module.exports = {
   dependencies: {
@@ -13,7 +14,7 @@ module.exports = {
     // file path so we can delete it.
     // Looks through the config.json, returns the correct write path for the file
     // based on its entry type.
-    console.log('Delete', writePath)
+    debug('Delete', writePath)
     services['gcs/deleteFromStorage']({writePath}, err => {
        // we want to ignore attempts to delete things that aren't found.
        // we don't want to error out the function and make contentful retry its request for the same thing over and over

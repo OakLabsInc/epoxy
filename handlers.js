@@ -90,7 +90,7 @@ module.exports = ({config, services}) => {
               contentful.resolveSys(field, cb)
             },
             function (err, result) {
-              if (err) console.error(err)
+              if (err) console.error('Error resolving fields:', err)
               process(result)
             }
           )
@@ -107,7 +107,7 @@ module.exports = ({config, services}) => {
           debug('calling processAction:', args)
           services.processAction(args, (err, result) => {
             if (err) {
-              console.error(err)
+              console.error('Error calling processAction:', err)
               res.status(500).send(err)
             } else {
               res.status(200).json(result)
